@@ -3,49 +3,44 @@ angular.module('app', [])
     function($timeout) {
       return {
         restrict: 'E',
-        // scope: {},
+        scope: {
+          stayOn: '@keepVisible'
+        },
+        replace: true,
+        template: '<div class="input-group" ng-class="{\'has-error\': showPassword}">\
+                    <span class="input-group-btn">\
+                      <button class="btn" ng-class="{false:\'btn-default\', true:\'btn-danger\'}[showPassword]" ng-mousedown="down()" ng-mouseup="up()" ng-mouseleave="check()">\
+                        <i class="fa fa-eye"></i>\
+                      </button>\
+                    </span>\
+                  </div>',
         compile: function(template) {
-          var container = angular.element('<div class="input-group" ng-class="{\'has-error\': showPassword}">\
-<span class="input-group-btn">\
-<button class="btn" ng-class="{false:\'btn-default\', true:\'btn-danger\'}[showPassword]" ng-mousedown="toggle()" ng-mouseup="toggle()" ng-mouseleave="check()">\
-<i class="fa fa-eye"></i>\
-</button>\
-</span>\
-</div>');
-          var pwinput = angular.element('<input type="password" class="form-control" ng-show="!showPassword" ng-model="password">');
-          var clearinput = angular.element('<input type="text" class="form-control" ng-show="showPassword" ng-model="password">');
-          container.prepend(pwinput);
-          container.prepend(clearinput);
-          template.append(container);
+          var input = angular.element('<input type="{{input_type}}" class="form-control" ng-model="password">');
+          template.prepend(input);
           return function(scope, elm, attr) {
+            var mousedown = false;
+            scope.input_type = 'password';
             scope.showPassword = false;
-            scope.toggle = function() {
-              scope.showPassword = !scope.showPassword;
-              if (!scope.showPassword) {
-                $timeout(function() {
-                  clearinput[0].focus();
-                });
-              } else {
-                $timeout(function() {
-                  pwinput[0].focus();
-                });
-              }
-              if (scope.autohide) {
-                $timeout(function(){
-                  if (scope.showPassword) {
-                    scope.showPassword = !scope.showPassword;
-                    $timeout(function() {
-                      pwinput[0].focus();
-                    });
-                  }
-                }, 1000);
-              }
-            };
+
+            scope.up = function() {
+              mousedown = false;
+              scope.input_type = 'password';
+              scope.showPassword = false;
+              input[0].focus();
+            }
+
+            scope.down = function() {
+              mousedown = true;
+              scope.input_type = 'text';
+              scope.showPassword = true;
+            }
+
             scope.check = function() {
-              
-              if (scope.showPassword) {
-                scope.showPassword = !scope.showPassword;
-              } 
+              if (mousedown && scope.showPassword) {
+                input[0].focus();
+                scope.showPassword = false;
+                scope.input_type = 'password';
+              }
             };
           };
         }
