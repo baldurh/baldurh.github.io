@@ -1,18 +1,21 @@
 <!DOCTYPE html>
-<html ng-app="app">
+<html>
 
   <head>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="ts-style.css" rel="stylesheet">
   </head>
 
-  <body>
+  <body ng-app="app">
     <div>
+        <p>&nbsp;</p>
       <tree-selection tree="data.tree" ng-controller="TreeController"></tree-selection>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
     <script src="controller.js"></script>
-    <script src="script.js"></script>
+    <script src="ts-script.js"></script>
     <script type="text/javascript">
       angular.module('app', ['ng-tree-selection', 'controller']);
     </script>
